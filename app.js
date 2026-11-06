@@ -233,7 +233,6 @@ function scream(o = {}) {
 /* ================= amplitude loop ================= */
 let amp = 0, micAmp = 0;
 const tdata = new Float32Array(analyser.fftSize);
-const heroCat = $('#heroCat');
 function meter() {
   analyser.getFloatTimeDomainData(tdata);
   let s = 0;
@@ -255,8 +254,54 @@ function meter() {
 }
 requestAnimationFrame(meter);
 
+/* ================= hero video voice note ================= */
+const heroVid = $('#heroVid'), heroPlayer = $('#heroPlayer'), vidTag = $('#vidTag');
+const heroBars = (() => {
+  const w = $('.wave', heroPlayer);
+  w.innerHTML = heroPlayer.dataset.peaks.split(',').map(v => `<b style="height:${Math.max(10, +v)}%"></b>`).join('');
+  return $$('b', w);
+})();
+let vidRouted = false, vidLoud = false;
+function vidQuiet() {
+  vidLoud = false;
+  heroVid.muted = true;
+  heroVid.loop = true;
+  heroPlayer.classList.remove('on');
+  vidTag.hidden = false;
+  heroBars.forEach(b => b.classList.remove('done'));
+  heroVid.play().catch(() => {});
+}
+function vidScream() {
+  if (vidLoud) { vidQuiet(); return; }
+  if (ctx.state === 'suspended') ctx.resume();
+  if (!vidRouted) {
+    try { ctx.createMediaElementSource(heroVid).connect(master); } catch (e) {}
+    vidRouted = true;
+  }
+  vidLoud = true;
+  heroVid.loop = false;
+  heroVid.currentTime = 0;
+  heroVid.muted = false;
+  heroVid.play().catch(() => {});
+  heroPlayer.classList.add('on');
+  vidTag.hidden = true;
+  bumpCount();
+  doFlash();
+  const tick = () => {
+    if (!vidLoud) return;
+    const f = heroVid.currentTime / (heroVid.duration || 5);
+    heroBars.forEach((b, i) => b.classList.toggle('done', i / heroBars.length < f));
+    requestAnimationFrame(tick);
+  };
+  tick();
+}
+heroVid.addEventListener('ended', vidQuiet);
+$('.play', heroPlayer).addEventListener('click', vidScream);
+$('.wave', heroPlayer).addEventListener('click', vidScream);
+$('#vidWrap').addEventListener('click', vidScream);
+
 /* ================= players with real waveform ================= */
-const players = $$('.player');
+const players = $$('.player:not(#heroPlayer)');
 function drawWaves() {
   const data = buf.getChannelData(0);
   players.forEach(p => {

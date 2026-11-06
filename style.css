@@ -150,6 +150,14 @@ body.loud #agrid{opacity:.22}
 .note-time{margin-left:auto;color:var(--pink);font-size:12px;font-weight:800}
 .note-img{border-radius:8px;aspect-ratio:1;object-fit:cover;width:100%;height:auto;
   transform:scale(calc(1 + var(--amp) * .06));transition:transform .06s}
+.vid-wrap{position:relative;cursor:pointer;border-radius:8px;overflow:hidden;background:#000}
+.vid-wrap video{display:block}
+.vid-tag{
+  position:absolute;left:10px;bottom:10px;background:var(--ink);color:var(--paper);
+  font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 9px;
+  border:1px solid var(--paper);
+}
+.vid-tag[hidden]{display:none}
 .player{
   display:flex;align-items:center;gap:12px;margin-top:12px;
   background:#0f0f0f;border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 8px;
