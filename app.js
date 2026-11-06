@@ -4,12 +4,11 @@
 
 // ---- fill these in at launch ----
 const CONFIG = {
-  ca: '',
+  ca: 'Bi59TGKZgLa7zVRz1BX3yPg6Cj8wWfZwfNc5FaCApump',
   links: {
-    pump: '',
-    x: '',
-    tg: '',
-    chart: ''
+    pump: 'https://pump.fun/coin/Bi59TGKZgLa7zVRz1BX3yPg6Cj8wWfZwfNc5FaCApump',
+    x: 'https://x.com/i/communities/2032177972770455645',
+    chart: 'https://dexscreener.com/solana/Bi59TGKZgLa7zVRz1BX3yPg6Cj8wWfZwfNc5FaCApump'
   }
 };
 
